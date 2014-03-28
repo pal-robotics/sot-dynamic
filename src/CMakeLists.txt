@@ -14,7 +14,7 @@
 # received a copy of the GNU Lesser General Public License along with
 # sot-dynamic. If not, see <http://www.gnu.org/licenses/>.
 
-INCLUDE(../cmake/python.cmake)
+INCLUDE(${SOT_CMAKE_DIR}/python.cmake)
 LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 
 # Verbosity level
@@ -29,12 +29,13 @@ ENDIF(CMAKE_BUILD_TYPE STREQUAL "DEBUG")
 SET(integrator-force-rk4_plugins_dependencies integrator-force)
 SET(integrator-force-exact_plugins_dependencies integrator-force)
 
+#link_directories(${DYNAMIC_GRAPH_PLUGINDIR})
 
 FOREACH(lib ${plugins})
   ADD_LIBRARY(${lib} SHARED ${lib}.cpp)
 
   SET_TARGET_PROPERTIES(${lib} PROPERTIES
-    PREFIX ""
+    LIBRARY_OUTPUT_DIRECTORY ${DYNAMIC_GRAPH_PLUGINDIR} 
     SOVERSION ${PROJECT_VERSION})
 
   IF(${lib}_plugins_dependencies)
@@ -42,22 +43,18 @@ FOREACH(lib ${plugins})
     TARGET_LINK_LIBRARIES(${lib} "${${lib}_plugins_dependencies}")
   ENDIF(${lib}_plugins_dependencies)
 
-  TARGET_LINK_LIBRARIES(${lib} ${Boost_LIBRARIES})
+  TARGET_LINK_LIBRARIES(${lib} ${Boost_LIBRARIES} ${catkin_LIBRARIES})
 
-  PKG_CONFIG_USE_DEPENDENCY(${lib} jrl-dynamics)
-  PKG_CONFIG_USE_DEPENDENCY(${lib} sot-core)
-  PKG_CONFIG_USE_DEPENDENCY(${lib} dynamic-graph)
-  PKG_CONFIG_USE_DEPENDENCY(${lib} jrl-mal)
-
-  INSTALL(TARGETS ${lib} DESTINATION ${DYNAMIC_GRAPH_PLUGINDIR})
+  INSTALL(TARGETS ${lib} DESTINATION lib/dynamic-graph)
 
   # build python submodule
   STRING(REPLACE - _ PYTHON_LIBRARY_NAME ${lib})
 
   DYNAMIC_GRAPH_PYTHON_MODULE("sot/dynamics/${PYTHON_LIBRARY_NAME}"
-    ${lib}
+    ""
     sot-dynamics-${PYTHON_LIBRARY_NAME}-wrap
     )
+  target_link_libraries(sot-dynamics-${PYTHON_LIBRARY_NAME}-wrap ${lib})
 ENDFOREACH(lib)
 
 # Main Library
@@ -65,9 +62,6 @@ ADD_LIBRARY(${LIBRARY_NAME} SHARED sot-dynamic.cpp)
 TARGET_LINK_LIBRARIES(${LIBRARY_NAME} jrl-dynamics)
 TARGET_LINK_LIBRARIES(${LIBRARY_NAME} sot-core)
 TARGET_LINK_LIBRARIES(${LIBRARY_NAME} dynamic-graph)
-PKG_CONFIG_USE_DEPENDENCY(${LIBRARY_NAME} jrl-dynamics)
-PKG_CONFIG_USE_DEPENDENCY(${LIBRARY_NAME} sot-core)
-PKG_CONFIG_USE_DEPENDENCY(${LIBRARY_NAME} dynamic-graph)
 
 INSTALL(TARGETS ${LIBRARY_NAME} DESTINATION ${CMAKE_INSTALL_LIBDIR})
 

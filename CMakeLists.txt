@@ -13,12 +13,14 @@
 # received a copy of the GNU Lesser General Public License along with
 # sot-dynamic. If not, see <http://www.gnu.org/licenses/>.
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.3)
 
-INCLUDE(cmake/base.cmake)
-INCLUDE(cmake/boost.cmake)
-INCLUDE(cmake/lapack.cmake)
-INCLUDE(cmake/cpack.cmake)
+find_package(catkin REQUIRED COMPONENTS sot_cmake jrl-mal jrl-dynamics dynamic-graph sot-core sot-tools)
+
+INCLUDE(${SOT_CMAKE_DIR}/base.cmake)
+INCLUDE(${SOT_CMAKE_DIR}/boost.cmake)
+INCLUDE(${SOT_CMAKE_DIR}/lapack.cmake)
+INCLUDE(${SOT_CMAKE_DIR}/cpack.cmake)
 
 SET(PROJECT_NAME sot-dynamic)
 
@@ -38,14 +40,9 @@ SET(PKG_CONFIG_ADDITIONAL_VARIABLES
 
 SETUP_PROJECT()
 
-# Search for dependencies.
-ADD_REQUIRED_DEPENDENCY("jrl-mal >= 1.9.0")
+include_directories(${catkin_INCLUDE_DIRS})
 
-ADD_REQUIRED_DEPENDENCY("jrl-dynamics >= 1.19.0")
-
-ADD_REQUIRED_DEPENDENCY("dynamic-graph >= 2.5.0")
-ADD_REQUIRED_DEPENDENCY("sot-core >= 2.5")
-ADD_REQUIRED_DEPENDENCY("sot-tools")
+catkin_package()
 
 # List plug-ins that will be compiled.
 SET(plugins
@@ -77,9 +74,9 @@ SEARCH_FOR_BOOST()
 # Add subdirectories.
 ADD_SUBDIRECTORY(include)
 ADD_SUBDIRECTORY(src)
-ADD_SUBDIRECTORY(doc)
+#ADD_SUBDIRECTORY(doc)
 ADD_SUBDIRECTORY(python)
-ADD_SUBDIRECTORY(unitTesting)
+#ADD_SUBDIRECTORY(unitTesting)
 
 SETUP_PROJECT_FINALIZE()
 SETUP_PROJECT_CPACK()
