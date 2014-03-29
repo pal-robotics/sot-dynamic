@@ -40,9 +40,13 @@ SET(PKG_CONFIG_ADDITIONAL_VARIABLES
 
 SETUP_PROJECT()
 
-include_directories(${catkin_INCLUDE_DIRS})
+catkin_package(
+    INCLUDE_DIRS include
+    LIBRARIES ${PROJECT_NAME}
+    CATKIN_DEPENDS jrl-dynamics
+)
 
-catkin_package()
+include_directories(${catkin_INCLUDE_DIRS})
 
 # List plug-ins that will be compiled.
 SET(plugins
