@@ -17,5 +17,6 @@
   
   <run_depend>soth</run_depend>
   <run_depend>jrl-dynamics</run_depend>
+  <run_depend>sot-core</run_depend>
 
 </package>

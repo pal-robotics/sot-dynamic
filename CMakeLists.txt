@@ -43,7 +43,7 @@ SETUP_PROJECT()
 catkin_package(
     INCLUDE_DIRS include
     LIBRARIES ${PROJECT_NAME}
-    CATKIN_DEPENDS jrl-dynamics
+    CATKIN_DEPENDS jrl-dynamics sot-core
 )
 
 include_directories(${catkin_INCLUDE_DIRS})
