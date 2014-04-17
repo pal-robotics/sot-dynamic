@@ -873,7 +873,7 @@ computeGenericPosition( CjrlJoint * aJoint,MatrixHomogeneous& res,int time )
 
   //  aJoint->computeJacobianJointWrtConfig();
   //res.initFromMotherLib(aJoint->jacobianJointWrtConfig());
-
+/*
   // adaptation to the new dynamic -- to be optimized
     matrix4d initialTr;
     initialTr = aJoint->initialPosition();
@@ -898,7 +898,7 @@ computeGenericPosition( CjrlJoint * aJoint,MatrixHomogeneous& res,int time )
         MAL_S4x4_MATRIX_ACCESS_I_J(res,i,j) =
   	MAL_S4x4_MATRIX_ACCESS_I_J(invrot,i,j);
     //end of the adaptation
-
+*/
 
   sotDEBUGOUT(25);
   return res;
